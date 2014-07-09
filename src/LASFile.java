@@ -72,7 +72,7 @@ public abstract class LASFile implements LASFileInterface {
 
     @Override
     public LASVersion getVersion() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return LASVersion.unknown;
     }
 
     @Override
