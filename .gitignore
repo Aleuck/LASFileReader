@@ -1,5 +1,6 @@
 # NetBeans specific
 nbproject/private
+nbproject/genfiles.properties
 build/
 dist/
 nbbuild/
