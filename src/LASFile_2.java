@@ -8,7 +8,7 @@
  *
  * @author aleuck
  */
-public class LASFile_2_0 extends LASFile {
+public class LASFile_2 extends LASFile {
     @Override
     public LASVersion getVersion() {
         return LASVersion.v2_0;

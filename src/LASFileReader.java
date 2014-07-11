@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class LASFileReader {
     /**
      * 
-     * @param filePath
+     * @param filePath file that will be parsed.
      * @return A {@link LASFile} object.
      * @throws IOException
      * @throws Exception
@@ -57,9 +57,9 @@ public abstract class LASFileReader {
         }
     }
     /**
-     * 
-     * @param sections
-     * @return The version of the lasFile
+     * Returns the {@link LASVersion} of the file, unknown version if it fails.
+     * @param sections all de sections of the file as a list of sections.
+     * @return the version of the LAS file.
      */
     private static LASVersion checkVersion(List<List<String>> sections) {
         int i = 0;
@@ -67,20 +67,19 @@ public abstract class LASFileReader {
         List<String> currentSection;
         String sectionTitle;
         Dictionary mnemonics;
-        //System.out.println("Looking for version section.");
         lfv: while (i < sections.size() && version == LASVersion.unknown) {
             currentSection = sections.get(i);
             sectionTitle = currentSection.get(0).trim().toUpperCase();
-            //System.out.println(sectionTitle);
+            // Looking for version information
             if (sectionTitle.startsWith("~VERSION") || sectionTitle.compareTo("~V") == 0) {
-                //System.out.println("found!");
-                //System.out.println("Looking for VERS. mnemonic");
+                // Found possible version section
                 for (String line : currentSection.subList(1, currentSection.size())) {
                     line = line.trim();
-                    //System.out.println(line);
                     if (!line.startsWith("~") && !line.startsWith("#")) {
+                        // Trying to read parameter data lines
                         try {
                             LASParameterDataLine pd = new LASParameterDataLine_dummy(line);
+                            // Getting the version.
                             if (pd.mnemonic.equals("VERS")) {
                                 if (pd.value.startsWith("2.0")) {
                                     version = LASVersion.v2_0;
@@ -98,13 +97,13 @@ public abstract class LASFileReader {
             }
             i++;
         }
-        // version not identified.
+        // returns version found or unknown version.
         return version;
     }
     private static LASFile open2_0(List<List<String>> sections) {
         // TODO: parse 2.0 LAS File
         System.out.println("2.0");
-        return new LASFile_2_0();
+        return new LASFile_2();
     }
     private static LASFile open3_0(List<List<String>> sections) throws Exception {
         // TODO: parse 3.0 LAS File
