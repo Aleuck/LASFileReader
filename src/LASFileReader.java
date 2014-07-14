@@ -109,6 +109,7 @@ public abstract class LASFileReader {
         // TODO: parse 3.0 LAS File
         LASFile_3 lasFile = new LASFile_3();
         List<String> currentSection;
+        boolean wrap;
         String delimiter = " ";
         System.out.println("3.0");
         
@@ -124,7 +125,7 @@ public abstract class LASFileReader {
                     LASParameterDataLine_3 data = new LASParameterDataLine_3(line);
                     switch (data.mnemonic) {
                         case "VERS":
-                            // TODO
+                            // do nothing
                             break;
                         case "WRAP":
                             // TODO
