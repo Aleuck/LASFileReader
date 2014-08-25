@@ -1,5 +1,7 @@
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,37 +13,28 @@ import java.util.Map;
  *
  * @author aleuck
  */
-public class LASSection {
-    private final Map<String,LASParameterDataLine> parameters;
-
-    public LASSection() {
-        parameters = new HashMap<>();
+public class LASSection implements LASSectionInterface {
+    private String title;
+    private List<String> lines;
+    public LASSection(String secTitle, List<String> secLines) {
+        title = secTitle;
+        lines = secLines;
     }
-    protected void add(LASParameterDataLine data) {
-        parameters.put(data.mnemonic, data);
-        parameters.get(data.mnemonic);
+    public LASSection(LASSection sec) {
+        this(sec.getTitle(), sec.getLines());
     }
-    public LASParameterDataLine get(String mnemonic) {
-        return parameters.get(mnemonic);
+    public LASSection(List<String> sec) {
+        this(
+            sec.get(0).trim().substring(1), // removing the ~
+            sec.subList(1, sec.size())
+        );
     }
-
-    public int size() {
-        return parameters.size();
+    @Override
+    public String getTitle() {
+        return title;
     }
-
-    public boolean isEmpty() {
-        return parameters.isEmpty();
-    }
-
-    public Object get(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object put(Object k, Object v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object remove(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public List<String> getLines() {
+        return new ArrayList<>(lines);
     }
 }

@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,10 +14,13 @@ import java.util.regex.Pattern;
  *
  * @author aleuck
  */
-public class LASParameterDataLine_2 extends LASParameterDataLine {
+public class LASParameterDataLine_2 implements LASParameterDataLine {
+    protected String mnemonic = "";
+    protected String value = "";
+    protected String unit = "";
     protected String description = "";
     protected String format = "";
-    protected List<String> assocList;
+    protected List<String> assocList = new ArrayList<>();
     
     public LASParameterDataLine_2(String line, String delimiter) throws Exception {
         // MNEM.UNIT   VALUE : DESCRIPTION {Format} | Assoc1,Assoc2 ...
@@ -55,5 +59,30 @@ public class LASParameterDataLine_2 extends LASParameterDataLine {
     }
     public LASParameterDataLine_2(String line) throws Exception {
         this(line , " ");
+    }
+
+    @Override
+    public String getMnemonic() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getUnit() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public String getFormat() {
+        return format;
+    }
+
+    @Override
+    public List<String> getAssoc() {
+        return new ArrayList<>();
     }
 }

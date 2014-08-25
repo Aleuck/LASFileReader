@@ -13,4 +13,9 @@ public class LASFile_2 extends LASFile {
     public LASVersion getVersion() {
         return LASVersion.v2_0;
     }
+
+    @Override
+    public LASSection getSection(String sectionTitle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

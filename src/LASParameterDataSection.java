@@ -1,3 +1,6 @@
+
+import java.util.Iterator;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,8 +11,7 @@
  *
  * @author aleuck
  */
-public interface LASParameterDataLineInterface {
-    String getMnemonic();
-    String getUnit();
-    String getValue();
+public interface LASParameterDataSection extends LASSectionInterface {
+    boolean hasParameter(String mnemonic);
+    LASParameterDataLine getParameter(String mnemonic);
 }

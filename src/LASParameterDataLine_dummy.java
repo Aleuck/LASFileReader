@@ -1,4 +1,6 @@
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +14,11 @@ import java.util.regex.Pattern;
  *
  * @author aleuck
  */
-public class LASParameterDataLine_dummy extends LASParameterDataLine {
-        public LASParameterDataLine_dummy(String line, String delimiter) throws Exception {
+public class LASParameterDataLine_dummy implements LASParameterDataLine {
+    protected String mnemonic;
+    protected String unit;
+    protected String value;
+    public LASParameterDataLine_dummy(String line, String delimiter) throws Exception {
         // MNEM.UNIT   VALUE : DESCRIPTION ...
         Pattern regexPattern;
         Matcher regexMatcher;
@@ -50,5 +55,30 @@ public class LASParameterDataLine_dummy extends LASParameterDataLine {
     }
     public LASParameterDataLine_dummy(String line) throws Exception {
         this(line , " ");
+    }
+
+    @Override
+    public String getMnemonic() {
+        return mnemonic;
+    }
+
+    @Override
+    public String getUnit() {
+        return unit;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public String getFormat() {
+        return "";
+    }
+
+    @Override
+    public List<String> getAssoc() {
+        return new ArrayList<>();
     }
 }

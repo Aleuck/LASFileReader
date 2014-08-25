@@ -8,8 +8,6 @@
  *
  * @author aleuck
  */
-public interface LASFileInterface {
-    LASVersion getVersion();
-    LASSection getWell();
-    LASSection getSection(String sectionTitle);
+public interface LASParameterData {
+    
 }
