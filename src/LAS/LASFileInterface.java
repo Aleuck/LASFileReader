@@ -1,5 +1,4 @@
-
-import java.util.List;
+package LAS;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,7 +10,8 @@ import java.util.List;
  *
  * @author aleuck
  */
-public interface LASSectionInterface {
-    String getTitle();
-    List<String> getLines();
+public interface LASFileInterface {
+    LASVersion getVersion();
+    LASSection getWell();
+    LASSection getSection(String sectionTitle);
 }

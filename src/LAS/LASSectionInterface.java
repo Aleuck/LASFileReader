@@ -1,5 +1,7 @@
+package LAS;
 
-import java.util.Iterator;
+
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,7 +13,7 @@ import java.util.Iterator;
  *
  * @author aleuck
  */
-public interface LASParameterDataSection extends LASSectionInterface {
-    boolean hasParameter(String mnemonic);
-    LASParameterDataLine getParameter(String mnemonic);
+public interface LASSectionInterface {
+    String getTitle();
+    List<String> getLines();
 }

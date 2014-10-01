@@ -1,3 +1,5 @@
+package LAS;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +16,12 @@ import java.util.regex.Pattern;
  *
  * @author aleuck
  */
-public class LASParameterDataLine_2 implements LASParameterDataLine {
-    protected String mnemonic = "";
-    protected String value = "";
-    protected String unit = "";
-    protected String description = "";
-    protected String format = "";
-    protected List<String> assocList = new ArrayList<>();
-    
-    public LASParameterDataLine_2(String line, String delimiter) throws Exception {
-        // MNEM.UNIT   VALUE : DESCRIPTION {Format} | Assoc1,Assoc2 ...
+public class LASParameterDataLine_dummy implements LASParameterDataLine {
+    protected String mnemonic;
+    protected String unit;
+    protected String value;
+    public LASParameterDataLine_dummy(String line, String delimiter) throws Exception {
+        // MNEM.UNIT   VALUE : DESCRIPTION ...
         Pattern regexPattern;
         Matcher regexMatcher;
         int periodIndex = 
@@ -57,18 +55,18 @@ public class LASParameterDataLine_2 implements LASParameterDataLine {
         }
         // TODO: get DESCRIPTION and what comes after.
     }
-    public LASParameterDataLine_2(String line) throws Exception {
+    public LASParameterDataLine_dummy(String line) throws Exception {
         this(line , " ");
     }
 
     @Override
     public String getMnemonic() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mnemonic;
     }
 
     @Override
     public String getUnit() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return unit;
     }
 
     @Override
@@ -78,7 +76,7 @@ public class LASParameterDataLine_2 implements LASParameterDataLine {
 
     @Override
     public String getFormat() {
-        return format;
+        return "";
     }
 
     @Override

@@ -1,3 +1,5 @@
+package LAS;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,18 +16,10 @@ import java.util.Set;
  * @author aleuck
  */
 public class LASParameterDataSection_3 implements LASParameterDataSection {
-    private final String title;
-    private List<String> lines;
+    protected String title;
+    protected List<String> lines;
     HashMap<String, LASParameterDataLine_3> parameters;
-    public LASParameterDataSection_3(LASSection_3 section, String delimiter) throws Exception {
-        title = section.getTitle();
-        for (String line : section.getLines()) {
-            if (!line.trim().startsWith("#")) {
-                LASParameterDataLine_3 paramLine = new LASParameterDataLine_3(line, delimiter);
-                parameters.put(paramLine.getMnemonic(), paramLine);
-            }
-        }
-    }
+    public LASParameterDataSection_3() {}
     public Set<String> mnemonicSet() {
         return parameters.keySet();
     }

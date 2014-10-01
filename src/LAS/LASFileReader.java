@@ -1,3 +1,5 @@
+package LAS;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -31,7 +33,7 @@ public abstract class LASFileReader {
         //System.out.print("Reading lasFile...");
         List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
         //System.out.println("done!");
-        List<LASSection> sections = new ArrayList<>();
+        List<List<String>> sections = new ArrayList<>();
         int last = -1;
         int i;
         // separating each section as a sublist of lines
@@ -39,13 +41,13 @@ public abstract class LASFileReader {
         for (i = 0; i < lines.size(); i++) {
             if (lines.get(i).startsWith("~")) {
                 if (last >= 0) {
-                    sections.add(new LASSection(lines.subList(last, i)));
+                    sections.add(lines.subList(last, i));
                 }
                 last = i;
             }
         }
         // add last section to section list.
-        sections.add(new LASSection(lines.subList(last, i)));
+        sections.add(lines.subList(last, i));
         //System.out.println("done!");
         // verify LAS version of lasFile
         switch (checkVersion(sections)) {
@@ -63,19 +65,19 @@ public abstract class LASFileReader {
      * @param sections all de sections of the file as a list of sections.
      * @return the version of the LAS file.
      */
-    private static LASVersion checkVersion(List<LASSection> sections) {
+    private static LASVersion checkVersion(List<List<String>> sections) {
         int i = 0;
         LASVersion version = LASVersion.unknown;
-        LASSection currentSection;
+        List<String> currentSection;
         String sectionTitle;
         Dictionary mnemonics;
         lfv: while (i < sections.size() && version == LASVersion.unknown) {
             currentSection = sections.get(i);
-            sectionTitle = currentSection.getTitle().trim().toUpperCase();
+            sectionTitle = currentSection.get(0).trim().toUpperCase();
             // Looking for version information
             if (sectionTitle.startsWith("~V")) {
                 // Found possible version section
-                for (String line : currentSection.getLines()) {
+                for (String line : currentSection) {
                     line = line.trim();
                     if (!line.startsWith("~") && !line.startsWith("#")) {
                         // Trying to read parameter data lines
@@ -102,15 +104,15 @@ public abstract class LASFileReader {
         // returns version found or unknown version.
         return version;
     }
-    private static LASFile open2_0(List<LASSection> sections) {
+    private static LASFile open2_0(List<List<String>> sections) {
         // TODO: parse 2.0 LAS File
         System.out.println("2.0");
         return new LASFile_2();
     }
-    private static LASFile open3_0(List<LASSection> sections) throws Exception {
+    private static LASFile open3_0(List<List<String>> sections) throws Exception {
         // TODO: parse 3.0 LAS File
         LASFile_3 lasFile = new LASFile_3();
-        LASSection currentSection;
+        List<String> currentSection;
         HashMap<String,String> delimiters;
         delimiters = new HashMap<>();
         delimiters.put("SPACE", " ");
@@ -124,20 +126,14 @@ public abstract class LASFileReader {
         
         // ~Version
         currentSection = sections.get(0);
-        if (!"~Version".equals(currentSection.getTitle().trim())) {
+        if (!"~Version".equals(currentSection.get(0).trim())) {
             throw new Exception("First section must be ~Version in LAS 3.0.");
         }
         
-        for (String line : currentSection.getLines()) {
-            LASParameterDataLine_3 data = new LASParameterDataLine_3("M.U V:D");
+        for (String line : currentSection) {
+            LASParameterDataLine_3 data = new LASParameterDataLine_3();
             if (!line.startsWith("#")) {
-                try {
-                    data = new LASParameterDataLine_3(line);
-                }
-                catch (Exception e) {
-                    // do nothing
-                }
-                
+               
                 switch (data.mnemonic) {
                     case "VERS":
                         // do nothing
@@ -159,7 +155,7 @@ public abstract class LASFileReader {
         }
         // ~Well
         currentSection = sections.get(1);
-        if (!"~Well".equals(currentSection.getTitle().trim())) {
+        if (!"~Well".equals(currentSection.get(0).trim())) {
             throw new Exception("Second section must be ~Well in LAS 3.0.");
         }
         
@@ -167,5 +163,12 @@ public abstract class LASFileReader {
             
         }
         return lasFile;
+    }
+    private static LASParameterDataSection buildParamaterDataSection2(List<String> section) throws Exception {
+        throw new Exception();
+    }
+    private static LASParameterDataLine buildParameterDataLine2(String line) throws Exception {
+        // MNEM.UNIT   VALUE : DESCRIPTION {Format} | Assoc1,Assoc2 ...
+        throw new Exception();
     }
 }

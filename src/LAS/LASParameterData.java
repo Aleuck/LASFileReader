@@ -1,5 +1,4 @@
-
-import java.util.List;
+package LAS;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,10 +10,6 @@ import java.util.List;
  *
  * @author aleuck
  */
-public interface LASParameterDataLine {
-    String getMnemonic();
-    String getUnit();
-    String getValue();
-    String getFormat();
-    List<String> getAssoc();
+public interface LASParameterData {
+    
 }
