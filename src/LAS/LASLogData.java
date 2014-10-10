@@ -5,11 +5,11 @@ package LAS;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author aleuck
  */
-public interface LASParameterData {
-    
+public class LASLogData {
+    protected LASParameterDataSection logParameter;
+    protected LASParameterDataSection logDefinition;
 }

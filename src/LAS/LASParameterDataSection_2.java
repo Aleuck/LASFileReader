@@ -1,7 +1,9 @@
 package LAS;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,7 +15,6 @@ import java.util.List;
  *
  * @author aleuck
  */
-public interface LASSectionInterface {
-    String getTitle();
-    List<String> getLines();
+public class LASParameterDataSection_2 extends LASParameterDataSection {
+
 }

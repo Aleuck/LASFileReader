@@ -1,7 +1,10 @@
 package LAS;
 
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,7 +16,20 @@ import java.util.Iterator;
  *
  * @author aleuck
  */
-public interface LASParameterDataSection extends LASSectionInterface {
-    boolean hasParameter(String mnemonic);
-    LASParameterDataLine getParameter(String mnemonic);
+public class LASParameterDataSection {
+    protected String title;
+    protected HashMap<String, LASParameterDataLine_2> parameters;
+    public Set<String> mnemonicSet() {
+        return parameters.keySet();
+    }
+    public boolean hasParameter(String mnemonic) {
+        return parameters.containsKey(mnemonic);
+    }
+    public LASParameterDataLine getParameter(String mnemonic) {
+        return parameters.get(mnemonic);
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }

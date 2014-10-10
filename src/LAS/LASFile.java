@@ -15,16 +15,13 @@ import java.util.Map;
  * @author aleuck
  */
 public abstract class LASFile implements LASFileInterface {
-    protected double startDepth;
-    protected double endDepth;
-    protected double step;
-    protected LASSection well;
-    private final Map<String,LASSection> sections;
+    protected LASParameterDataSection version;
+    protected LASParameterDataSection well;
+    protected LASParameterDataSection curve;
+    protected LASParameterDataSection parameters;
     
-    public LASFile() {
-        sections = new HashMap<>();
-    }
-    public LASSection getWell() {
+    @Override
+    public LASParameterDataSection getWell() {
         return well;
     }
 }

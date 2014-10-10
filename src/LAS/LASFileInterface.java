@@ -11,7 +11,7 @@ package LAS;
  * @author aleuck
  */
 public interface LASFileInterface {
-    LASVersion getVersion();
-    LASSection getWell();
-    LASSection getSection(String sectionTitle);
+    LASParameterDataSection getVersion();
+    LASParameterDataSection getWell();
+    LASLogData[] getData();
 }

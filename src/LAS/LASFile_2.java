@@ -12,12 +12,12 @@ package LAS;
  */
 public class LASFile_2 extends LASFile {
     @Override
-    public LASVersion getVersion() {
-        return LASVersion.v2_0;
+    public LASParameterDataSection getVersion() {
+        return version;
     }
 
     @Override
-    public LASSection getSection(String sectionTitle) {
+    public LASLogData[] getData() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

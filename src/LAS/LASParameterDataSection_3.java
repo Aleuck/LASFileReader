@@ -15,11 +15,9 @@ import java.util.Set;
  *
  * @author aleuck
  */
-public class LASParameterDataSection_3 implements LASParameterDataSection {
-    protected String title;
-    protected List<String> lines;
-    HashMap<String, LASParameterDataLine_3> parameters;
+public class LASParameterDataSection_3 extends LASParameterDataSection {
     public LASParameterDataSection_3() {}
+    @Override
     public Set<String> mnemonicSet() {
         return parameters.keySet();
     }
@@ -35,10 +33,5 @@ public class LASParameterDataSection_3 implements LASParameterDataSection {
     @Override
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public List<String> getLines() {
-        return lines;
     }
 }

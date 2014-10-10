@@ -106,6 +106,7 @@ public abstract class LASFileReader {
     }
     private static LASFile open2_0(List<List<String>> sections) {
         // TODO: parse 2.0 LAS File
+        LASFile_2 lasFile = new LASFile_2();
         System.out.println("2.0");
         return new LASFile_2();
     }
