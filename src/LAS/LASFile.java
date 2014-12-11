@@ -2,6 +2,7 @@ package LAS;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -14,14 +15,31 @@ import java.util.Map;
  *
  * @author aleuck
  */
-public abstract class LASFile implements LASFileInterface {
-    protected LASParameterDataSection version;
-    protected LASParameterDataSection well;
-    protected LASParameterDataSection curve;
-    protected LASParameterDataSection parameters;
+public class LASFile implements LASFileInterface {
+    protected LASVersion version;
+    protected LASParameterDataSection version_section;
+    protected LASParameterDataSection well_section;
+    protected LASParameterDataSection curve_sections;
+    protected LASParameterDataSection parameters_sections;
+    protected List<LASLogData> data;
     
     @Override
-    public LASParameterDataSection getWell() {
-        return well;
+    public LASVersion getVersion() {
+        return version;
+    }
+
+    @Override
+    public LASParameterDataSection getVersionSection() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public LASParameterDataSection getWellSection() {
+        return version_section;
+    }
+
+    @Override
+    public List<LASLogData> getData() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

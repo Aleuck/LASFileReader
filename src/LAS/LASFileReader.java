@@ -82,7 +82,7 @@ public abstract class LASFileReader {
                     if (!line.startsWith("~") && !line.startsWith("#")) {
                         // Trying to read parameter data lines
                         try {
-                            LASParameterDataLine pd = new LASParameterDataLine_dummy(line);
+                            LASParameterDataLine pd = buildParameterDataLine2(line);
                             // Getting the version.
                             if (pd.getMnemonic().equals("VERS")) {
                                 if (pd.getValue().startsWith("2.0")) {
@@ -106,13 +106,23 @@ public abstract class LASFileReader {
     }
     private static LASFile open2_0(List<List<String>> sections) {
         // TODO: parse 2.0 LAS File
-        LASFile_2 lasFile = new LASFile_2();
+        List<String> currentSection;
+        LASFile lasFile = new LASFile();
+        boolean wrap;
+        boolean found = false;
+        for (int i = 0; i < sections.size() && !found ; i++) {
+            currentSection = sections.get(i);
+            if (currentSection.get(0).startsWith("~V")) {
+                found = true;
+                
+            }
+        }
         System.out.println("2.0");
-        return new LASFile_2();
+        return new LASFile();
     }
     private static LASFile open3_0(List<List<String>> sections) throws Exception {
         // TODO: parse 3.0 LAS File
-        LASFile_3 lasFile = new LASFile_3();
+        LASFile lasFile = new LASFile();
         List<String> currentSection;
         HashMap<String,String> delimiters;
         delimiters = new HashMap<>();
@@ -132,7 +142,7 @@ public abstract class LASFileReader {
         }
         
         for (String line : currentSection) {
-            LASParameterDataLine_3 data = new LASParameterDataLine_3();
+            LASParameterDataLine data = new LASParameterDataLine();
             if (!line.startsWith("#")) {
                
                 switch (data.mnemonic) {
@@ -165,11 +175,35 @@ public abstract class LASFileReader {
         }
         return lasFile;
     }
-    private static LASParameterDataSection buildParamaterDataSection2(List<String> section) throws Exception {
-        throw new Exception();
+    public static LASParameterDataSection buildParamaterDataSection2(List<String> section) throws Exception {
+        LASParameterDataSection thisSection = new LASParameterDataSection();
+        String title = section.remove(0).trim();
+        thisSection.title = title;
+        for (String line : section) {
+            line = line.trim();
+            if (!line.startsWith("#")) {
+                thisSection.addParameter(buildParameterDataLine2(line));
+            }
+        }
+        return thisSection;
     }
-    private static LASParameterDataLine buildParameterDataLine2(String line) throws Exception {
-        // MNEM.UNIT   VALUE : DESCRIPTION {Format} | Assoc1,Assoc2 ...
-        throw new Exception();
+    public static LASParameterDataLine buildParameterDataLine2(String line) throws Exception {
+        // MNEM.UNIT   VALUE : DESCRIPTION
+        LASParameterDataLine thisParameterData = new LASParameterDataLine();
+        int idxDot, idxVal, idxDes;
+        
+        idxDot = line.indexOf('.');
+        idxDot = idxDot < 0 ? 0 : idxDot;
+        idxVal = line.indexOf(' ', idxDot + 1);
+        idxVal = idxVal < idxDot + 1 ? idxDot + 1 : idxVal;
+        idxDes = line.indexOf(':', idxVal + 1);
+        idxDes = idxDes < idxVal + 1 ? line.length() - 1 : idxDes;
+        
+        thisParameterData.mnemonic = line.substring(0, idxDot).trim();
+        thisParameterData.unit = line.substring(idxDot + 1, idxVal).trim();
+        thisParameterData.value = line.substring(idxVal, idxDes).trim();
+        thisParameterData.description = line.substring(idxDes + 1, line.length()).trim();
+        
+        return thisParameterData;
     }
 }

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * @author aleuck
  */
-public class LASParameterDataLine_dummy implements LASParameterDataLine {
+public class LASParameterDataLine_dummy {
     protected String mnemonic;
     protected String unit;
     protected String value;
@@ -59,27 +59,22 @@ public class LASParameterDataLine_dummy implements LASParameterDataLine {
         this(line , " ");
     }
 
-    @Override
     public String getMnemonic() {
         return mnemonic;
     }
 
-    @Override
     public String getUnit() {
         return unit;
     }
 
-    @Override
     public String getValue() {
         return value;
     }
 
-    @Override
     public String getFormat() {
         return "";
     }
 
-    @Override
     public List<String> getAssoc() {
         return new ArrayList<>();
     }

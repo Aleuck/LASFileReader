@@ -1,5 +1,7 @@
 package LAS;
 
+import java.util.List;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,7 +13,8 @@ package LAS;
  * @author aleuck
  */
 public interface LASFileInterface {
-    LASParameterDataSection getVersion();
-    LASParameterDataSection getWell();
-    LASLogData[] getData();
+    LASVersion getVersion();
+    LASParameterDataSection getVersionSection();
+    LASParameterDataSection getWellSection();
+    List<LASLogData> getData();
 }

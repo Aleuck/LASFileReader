@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class LASParameterDataSection {
     protected String title;
-    protected HashMap<String, LASParameterDataLine_2> parameters;
+    protected HashMap<String, LASParameterDataLine> parameters = new HashMap<>();
     public Set<String> mnemonicSet() {
         return parameters.keySet();
     }
@@ -31,5 +31,8 @@ public class LASParameterDataSection {
 
     public String getTitle() {
         return title;
+    }
+    protected void addParameter(LASParameterDataLine parameterDataLine) {
+        parameters.put(parameterDataLine.getMnemonic(), parameterDataLine);
     }
 }
