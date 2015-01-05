@@ -15,5 +15,5 @@ import java.util.List;
 public class LASLogData {
     protected LASParameterDataSection logParameter = new LASParameterDataSection();
     protected LASParameterDataSection logDefinition = new LASParameterDataSection();
-    protected List<LASLogDataRecord> logRecords = new ArrayList<>();
+    //protected List<LASLogDataRecord> logRecords = new ArrayList<>();
 }

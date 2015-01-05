@@ -104,22 +104,6 @@ public abstract class LASFileReader {
         // returns version found or unknown version.
         return version;
     }
-    private static LASFile open2_0(List<List<String>> sections) {
-        // TODO: parse 2.0 LAS File
-        List<String> currentSection;
-        LASFile lasFile = new LASFile();
-        boolean wrap;
-        boolean found = false;
-        for (int i = 0; i < sections.size() && !found ; i++) {
-            currentSection = sections.get(i);
-            if (currentSection.get(0).startsWith("~V")) {
-                found = true;
-                
-            }
-        }
-        System.out.println("2.0");
-        return new LASFile();
-    }
     private static LASFile open3_0(List<List<String>> sections) throws Exception {
         // TODO: parse 3.0 LAS File
         LASFile lasFile = new LASFile();
@@ -178,7 +162,46 @@ public abstract class LASFileReader {
     
     /* LAS 2.0 */
     
-    public static LASParameterDataSection buildParamaterDataSection2(List<String> section) throws Exception {
+    private static LASFile open2_0(List<List<String>> sections) {
+        // TODO: parse 2.0 LAS File
+        List<String> currentSection;
+        LASFile lasFile = new LASFile();
+        lasFile.version = LASVersion.v2_0;
+        int indexV = -1;
+        int indexW = -1;
+        int indexC = -1;
+        int indexP = -1;
+        int indexO = -1;
+        int indexA = -1;
+        for (int i = 0; i < sections.size() ; i++) {
+            currentSection = sections.get(i);
+            if (currentSection.get(0).startsWith("~V")) {
+                indexV = i;
+            } else
+            if (currentSection.get(0).startsWith("~W")) {
+                indexW = i;
+            } else
+            if (currentSection.get(0).startsWith("~C")) {
+                indexC = i;
+            } else
+            if (currentSection.get(0).startsWith("~P")) {
+                indexP = i;
+            } else
+            if (currentSection.get(0).startsWith("~O")) {
+                indexO = i;
+            } else
+            if (currentSection.get(0).startsWith("~A")) {
+                indexA = i;
+            }
+        }
+        lasFile.version_section = buildParamaterDataSection2(sections.get(indexV))
+                ;
+        lasFile.well_section = buildParamaterDataSection2(sections.get(indexW));
+        //lasFile.data = buildLogData2();
+        System.out.println("2.0");
+        return new LASFile();
+    }
+    public static LASParameterDataSection buildParamaterDataSection2(List<String> section) {
         LASParameterDataSection thisSection = new LASParameterDataSection();
         String title = section.remove(0).trim();
         thisSection.title = title;
@@ -190,7 +213,7 @@ public abstract class LASFileReader {
         }
         return thisSection;
     }
-    public static LASParameterDataLine buildParameterDataLine2(String line) throws Exception {
+    public static LASParameterDataLine buildParameterDataLine2(String line) {
         // MNEM.UNIT   VALUE : DESCRIPTION
         LASParameterDataLine thisParameterData = new LASParameterDataLine();
         int idxDot, idxVal, idxDes;
