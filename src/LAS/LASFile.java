@@ -30,16 +30,16 @@ public class LASFile implements LASFileInterface {
 
     @Override
     public LASParameterDataSection getVersionSection() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return version_section;
     }
     
     @Override
     public LASParameterDataSection getWellSection() {
-        return version_section;
+        return well_section;
     }
 
     @Override
     public List<LASLogData> getData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return data;
     }
 }

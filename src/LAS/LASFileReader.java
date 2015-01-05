@@ -175,6 +175,9 @@ public abstract class LASFileReader {
         }
         return lasFile;
     }
+    
+    /* LAS 2.0 */
+    
     public static LASParameterDataSection buildParamaterDataSection2(List<String> section) throws Exception {
         LASParameterDataSection thisSection = new LASParameterDataSection();
         String title = section.remove(0).trim();
@@ -206,4 +209,6 @@ public abstract class LASFileReader {
         
         return thisParameterData;
     }
+    
+    /* LAS 3.0 */
 }
