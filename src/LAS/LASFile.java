@@ -1,7 +1,6 @@
 package LAS;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +17,12 @@ import java.util.Map;
  */
 public class LASFile implements LASFileInterface {
     protected LASVersion version;
-    protected LASParameterDataSection version_section = new LASParameterDataSection();
-    protected LASParameterDataSection well_section = new LASParameterDataSection();
-    protected LASParameterDataSection curve_sections;
-    protected List<LASLogData> data = new ArrayList<>();
+    protected LASParameterDataSection version_section;
+    protected LASParameterDataSection well_section;
+    protected Map<String,LASData> data = new HashMap<>();
+    // LAS 3.0 specific
+        protected LASParameterDataSection core_section;
+        protected LASParameterDataSection inclinometry_section;
 
     @Override
     public LASVersion getVersion() {
@@ -39,7 +40,11 @@ public class LASFile implements LASFileInterface {
     }
 
     @Override
-    public List<LASLogData> getData() {
-        return data;
+    public LASData getData(String title) {
+        return data.get(title);
+    }
+    @Override
+    public LASData getData() {
+        return data.get("Log");
     }
 }
