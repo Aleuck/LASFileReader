@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public class LASParameterDataLine {
     protected String mnemonic = "";

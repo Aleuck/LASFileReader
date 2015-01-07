@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public interface LASFileInterface {
     LASVersion getVersion();

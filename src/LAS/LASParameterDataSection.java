@@ -15,26 +15,44 @@ import java.util.Set;
 
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public class LASParameterDataSection implements Iterable {
     protected String title;
-    protected HashMap<String, Integer> parametersMap = new HashMap<>();
-    protected List<LASParameterDataLine> parameters = new ArrayList<>();
+    private final HashMap<String, Integer> parametersMap = new HashMap<>();
+    private final List<LASParameterDataLine> parameters = new ArrayList<>();
     public String getTitle() {
         return title;
     }
+    /**
+     * Checks whether given mnemonic exists in the section. 
+     * @param mnemonic
+     * @return true if there is a parameter with specified mnemonic
+     */
     public boolean hasParameter(String mnemonic) {
         return parametersMap.containsKey(mnemonic);
     }
+    /**
+     * 
+     * @return a set with all available mnemonics.
+     */
     public Set<String> mnemonicSet() {
         return parametersMap.keySet();
     }
     public LASParameterDataLine getParameter(int index) {
         return parameters.get(index);
     }
+    /**
+     * 
+     * @param mnemonic
+     * @return the last parameter with given mnemonic, or null if there is no correspondent parameter.
+     */
     public LASParameterDataLine getParameter(String mnemonic) {
-        return getParameter(parametersMap.get(mnemonic));
+        Integer index = parametersMap.get(mnemonic);
+        if (index == null) {
+            return null;
+        }
+        return getParameter(index);
     }
     protected void addParameter(LASParameterDataLine parameterDataLine) {
         int i = parameters.size();

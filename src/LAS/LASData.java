@@ -1,8 +1,5 @@
 package LAS;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,7 +7,7 @@ import java.util.List;
  */
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public class LASData {
     protected LASParameterDataSection logDefinition = new LASParameterDataSection(); // Column Definition (Curve)

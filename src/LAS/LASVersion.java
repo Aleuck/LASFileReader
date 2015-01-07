@@ -8,7 +8,7 @@ package LAS;
 
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public enum LASVersion {
     unknown, v1_0, v1_1, v2_0, v3_0;

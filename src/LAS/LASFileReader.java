@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public abstract class LASFileReader {
     /**
@@ -162,11 +162,12 @@ public abstract class LASFileReader {
     
     /* LAS 2.0 */
     
-    private static LASFile open2_0(List<List<String>> sections) {
+    private static LASFile open2_0(List<List<String>> sections) throws Exception {
         // TODO: parse 2.0 LAS File
         List<String> currentSection;
         LASFile lasFile = new LASFile();
         lasFile.version = LASVersion.v2_0;
+        boolean wrap;
         int indexV = -1;
         int indexW = -1;
         int indexC = -1;
@@ -194,8 +195,35 @@ public abstract class LASFileReader {
                 indexA = i;
             }
         }
-        lasFile.version_section = buildParamaterDataSection2(sections.get(indexV))
-                ;
+        lasFile.version_section = buildParamaterDataSection2(sections.get(indexV));
+        // identifying wrap mode
+        LASParameterDataLine wrapParameter = lasFile.getVersionSection().getParameter("WRAP");
+        if (lasFile.version_section.hasParameter("WRAP")) {
+            throw new Exception("Missing parameter: WRAP.");
+        }
+        if (indexW == -1) {
+            throw new Exception("Missing section ~W");
+        }
+        lasFile.well_section = buildParamaterDataSection2(sections.get(indexW));
+        if (indexO != -1) {
+            lasFile.other_section = buildParamaterDataSection2(sections.get(indexO));
+        }
+        if (indexC == -1) {
+            throw new Exception("Missing section ~C");
+        }
+        if (indexA == -1) {
+            throw new Exception("Missing section ~A");
+        }
+        switch (lasFile.version_section.getParameter("WRAP").getValue()) {
+            case "YES":
+                wrap = true;
+                break;
+            case "NO":
+                wrap = false;
+                break;
+            default:
+                throw new Exception("Invalid parameter value for WRAP.");
+        }
         lasFile.well_section = buildParamaterDataSection2(sections.get(indexW));
         //lasFile.data = buildLogData2();
         System.out.println("2.0");

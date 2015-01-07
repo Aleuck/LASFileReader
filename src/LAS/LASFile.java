@@ -2,7 +2,6 @@ package LAS;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -13,13 +12,15 @@ import java.util.Map;
 
 /**
  *
- * @author aleuck
+ * @author Alexandre Leuck
  */
 public class LASFile implements LASFileInterface {
     protected LASVersion version;
     protected LASParameterDataSection version_section;
     protected LASParameterDataSection well_section;
     protected Map<String,LASData> data = new HashMap<>();
+    // LAS 2.0 specific
+        protected LASParameterDataSection other_section;
     // LAS 3.0 specific
         protected LASParameterDataSection core_section;
         protected LASParameterDataSection inclinometry_section;
@@ -37,6 +38,27 @@ public class LASFile implements LASFileInterface {
     @Override
     public LASParameterDataSection getWellSection() {
         return well_section;
+    }
+    /**
+     * LAS 2.0 specific
+     * @return 
+     */
+    public LASParameterDataSection getOtherSection() {
+        return other_section;
+    }
+    /**
+     * LAS 3.0 specific
+     * @return 
+     */
+    public LASParameterDataSection getCoreSection() {
+        return core_section;
+    }
+    /**
+     * LAS 3.0 specific
+     * @return 
+     */
+    public LASParameterDataSection getInclinometrySection() {
+        return inclinometry_section;
     }
 
     @Override
