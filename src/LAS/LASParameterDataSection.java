@@ -18,7 +18,7 @@ import java.util.Set;
  * @author Alexandre Leuck
  */
 public class LASParameterDataSection implements Iterable {
-    protected String title;
+    protected String title = "";
     private final HashMap<String, Integer> parametersMap = new HashMap<>();
     private final List<LASParameterDataLine> parameters = new ArrayList<>();
     public String getTitle() {
@@ -34,12 +34,20 @@ public class LASParameterDataSection implements Iterable {
     }
     /**
      * 
-     * @return a set with all available mnemonics.
+     * @return a {@link Set} with all available mnemonics.
      */
     public Set<String> mnemonicSet() {
         return parametersMap.keySet();
     }
+    /**
+     * 
+     * @param index
+     * @return {@link LASParameterDataLine} or null in case of invalid index.
+     */
     public LASParameterDataLine getParameter(int index) {
+        if (index < 0 || index >= parameters.size()) {
+            return null;
+        }
         return parameters.get(index);
     }
     /**

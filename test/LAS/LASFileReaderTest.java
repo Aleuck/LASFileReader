@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author white
+ * @author Alxandre Leuck
  */
 public class LASFileReaderTest {
     
@@ -50,7 +50,13 @@ public class LASFileReaderTest {
         section.add("#MNEM.UNIT VALUE : DESCRIPTION");
         section.add(" VERS.     2.0   :  LAS 2.0   ");
         section.add(" WRAP.     YES   :  asdasd  asdad ");
-        LASParameterDataSection result = LASFileReader.buildParamaterDataSection2(section);
+        LASParameterDataSection result = new LASParameterDataSection();
+        try {
+            result = LASFileReader.buildParamaterDataSection2(section);
+        }
+        catch (Exception e) {
+            fail("Failed to parse valid section.");
+        }
         assertEquals("error section title","~Version",result.getTitle());
         assertEquals(true,result.hasParameter("VERS"));
         assertEquals(true,result.hasParameter("WRAP"));
@@ -80,5 +86,16 @@ public class LASFileReaderTest {
         assertEquals("error on unit", "M", result.getUnit());
         assertEquals("error on value", "100", result.getValue());
         assertEquals("error on description", "STEP", result.description);
+    }
+    
+    @Test
+    public void testBuildParameterDataLine2_gamma() throws Exception {
+        System.out.println("buildParameterDataLine2");
+        String line = "GR  .GAPI     45 310 01 00 : 9        GAMMA RAY";
+        LASParameterDataLine result = LASFileReader.buildParameterDataLine2(line);
+        assertEquals("error on mnemonic", "GR", result.getMnemonic());
+        assertEquals("error on unit", "GAPI", result.getUnit());
+        assertEquals("error on value", "45 310 01 00", result.getValue());
+        assertEquals("error on description", "9        GAMMA RAY", result.description);
     }
 }

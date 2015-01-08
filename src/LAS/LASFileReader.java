@@ -63,7 +63,7 @@ public abstract class LASFileReader {
     /**
      * Returns the {@link LASVersion} of the file, unknown version if it fails.
      * @param sections all de sections of the file as a list of sections.
-     * @return the version of the LAS file.
+     * @return {@link LASVersion}.
      */
     private static LASVersion checkVersion(List<List<String>> sections) {
         int i = 0;
@@ -126,8 +126,9 @@ public abstract class LASFileReader {
         }
         
         for (String line : currentSection) {
+            line = line.trim();
             LASParameterDataLine data = new LASParameterDataLine();
-            if (!line.startsWith("#")) {
+            if (!line.startsWith("#") && !line.startsWith("~")) {
                
                 switch (data.mnemonic) {
                     case "VERS":
@@ -164,7 +165,6 @@ public abstract class LASFileReader {
     
     private static LASFile open2_0(List<List<String>> sections) throws Exception {
         // TODO: parse 2.0 LAS File
-        List<String> currentSection;
         LASFile lasFile = new LASFile();
         lasFile.version = LASVersion.v2_0;
         boolean wrap;
@@ -175,44 +175,52 @@ public abstract class LASFileReader {
         int indexO = -1;
         int indexA = -1;
         for (int i = 0; i < sections.size() ; i++) {
-            currentSection = sections.get(i);
-            if (currentSection.get(0).startsWith("~V")) {
+            String sectionTitle = sections.get(i).get(0).trim();
+            if (sectionTitle.startsWith("~V")) {
                 indexV = i;
             } else
-            if (currentSection.get(0).startsWith("~W")) {
+            if (sectionTitle.startsWith("~W")) {
                 indexW = i;
             } else
-            if (currentSection.get(0).startsWith("~C")) {
+            if (sectionTitle.startsWith("~C")) {
                 indexC = i;
             } else
-            if (currentSection.get(0).startsWith("~P")) {
+            if (sectionTitle.startsWith("~P")) {
                 indexP = i;
             } else
-            if (currentSection.get(0).startsWith("~O")) {
+            if (sectionTitle.startsWith("~O")) {
                 indexO = i;
             } else
-            if (currentSection.get(0).startsWith("~A")) {
+            if (sectionTitle.startsWith("~A")) {
                 indexA = i;
             }
         }
-        lasFile.version_section = buildParamaterDataSection2(sections.get(indexV));
-        // identifying wrap mode
-        LASParameterDataLine wrapParameter = lasFile.getVersionSection().getParameter("WRAP");
-        if (lasFile.version_section.hasParameter("WRAP")) {
-            throw new Exception("Missing parameter: WRAP.");
+        // Version
+        if (indexV == -1) {
+            throw new Exception("Missing section ~V");
         }
+        lasFile.version_section = buildParamaterDataSection2(sections.get(indexV));
+        // Well
         if (indexW == -1) {
             throw new Exception("Missing section ~W");
         }
         lasFile.well_section = buildParamaterDataSection2(sections.get(indexW));
+        // Other
         if (indexO != -1) {
             lasFile.other_section = buildParamaterDataSection2(sections.get(indexO));
         }
+        // Curve
         if (indexC == -1) {
             throw new Exception("Missing section ~C");
         }
+        LASParameterDataSection curve = buildParamaterDataSection2(sections.get(indexC));
+        // ASCII
         if (indexA == -1) {
             throw new Exception("Missing section ~A");
+        }
+        // identifying wrap mode
+        if (!lasFile.version_section.hasParameter("WRAP")) {
+            throw new Exception("Missing parameter: WRAP.");
         }
         switch (lasFile.version_section.getParameter("WRAP").getValue()) {
             case "YES":
@@ -224,28 +232,34 @@ public abstract class LASFileReader {
             default:
                 throw new Exception("Invalid parameter value for WRAP.");
         }
-        lasFile.well_section = buildParamaterDataSection2(sections.get(indexW));
         //lasFile.data = buildLogData2();
         System.out.println("2.0");
         return new LASFile();
     }
-    public static LASParameterDataSection buildParamaterDataSection2(List<String> section) {
+    protected static LASParameterDataSection buildParamaterDataSection2(List<String> section) {
         LASParameterDataSection thisSection = new LASParameterDataSection();
-        String title = section.remove(0).trim();
+        String title = section.get(0).trim();
+        System.out.println(title);
         thisSection.title = title;
         for (String line : section) {
             line = line.trim();
-            if (!line.startsWith("#")) {
-                thisSection.addParameter(buildParameterDataLine2(line));
+            if (!line.startsWith("#") && !line.startsWith("~")) {
+                LASParameterDataLine parameterDataLine = buildParameterDataLine2(line);
+                thisSection.addParameter(parameterDataLine);
+                System.out.print(parameterDataLine.mnemonic);
+                if (thisSection.hasParameter(parameterDataLine.mnemonic)) {
+                    System.out.println("....OK");
+                } else {
+                    System.out.println("....FAIL");
+                }
             }
         }
         return thisSection;
     }
-    public static LASParameterDataLine buildParameterDataLine2(String line) {
+    protected static LASParameterDataLine buildParameterDataLine2(String line) {
         // MNEM.UNIT   VALUE : DESCRIPTION
-        LASParameterDataLine thisParameterData = new LASParameterDataLine();
+        LASParameterDataLine parameterDataLine = new LASParameterDataLine();
         int idxDot, idxVal, idxDes;
-        
         idxDot = line.indexOf('.');
         idxDot = idxDot < 0 ? 0 : idxDot;
         idxVal = line.indexOf(' ', idxDot + 1);
@@ -253,12 +267,11 @@ public abstract class LASFileReader {
         idxDes = line.indexOf(':', idxVal + 1);
         idxDes = idxDes < idxVal + 1 ? line.length() - 1 : idxDes;
         
-        thisParameterData.mnemonic = line.substring(0, idxDot).trim();
-        thisParameterData.unit = line.substring(idxDot + 1, idxVal).trim();
-        thisParameterData.value = line.substring(idxVal, idxDes).trim();
-        thisParameterData.description = line.substring(idxDes + 1, line.length()).trim();
-        
-        return thisParameterData;
+        parameterDataLine.mnemonic = line.substring(0, idxDot).trim();
+        parameterDataLine.unit = line.substring(idxDot + 1, idxVal).trim();
+        parameterDataLine.value = line.substring(idxVal, idxDes).trim();
+        parameterDataLine.description = line.substring(idxDes + 1, line.length()).trim();
+        return parameterDataLine;
     }
     
     /* LAS 3.0 */
