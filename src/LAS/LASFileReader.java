@@ -214,10 +214,18 @@ public abstract class LASFileReader {
             throw new Exception("Missing section ~C");
         }
         LASParameterDataSection curve = buildParamaterDataSection2(sections.get(indexC));
+        // Parameters
+        LASParameterDataSection parameters;
+        if (indexP != -1) {
+            parameters = buildParamaterDataSection2(sections.get(indexP));
+        } else {
+            parameters = new LASParameterDataSection();
+        }
         // ASCII
         if (indexA == -1) {
             throw new Exception("Missing section ~A");
         }
+        lasFile.data.put("Log", buildData2(curve, parameters, sections.get(indexA)));
         // identifying wrap mode
         if (!lasFile.version_section.hasParameter("WRAP")) {
             throw new Exception("Missing parameter: WRAP.");
@@ -232,26 +240,17 @@ public abstract class LASFileReader {
             default:
                 throw new Exception("Invalid parameter value for WRAP.");
         }
-        //lasFile.data = buildLogData2();
-        System.out.println("2.0");
-        return new LASFile();
+        return lasFile;
     }
     protected static LASParameterDataSection buildParamaterDataSection2(List<String> section) {
         LASParameterDataSection thisSection = new LASParameterDataSection();
         String title = section.get(0).trim();
-        System.out.println(title);
         thisSection.title = title;
         for (String line : section) {
             line = line.trim();
             if (!line.startsWith("#") && !line.startsWith("~")) {
                 LASParameterDataLine parameterDataLine = buildParameterDataLine2(line);
                 thisSection.addParameter(parameterDataLine);
-                System.out.print(parameterDataLine.mnemonic);
-                if (thisSection.hasParameter(parameterDataLine.mnemonic)) {
-                    System.out.println("....OK");
-                } else {
-                    System.out.println("....FAIL");
-                }
             }
         }
         return thisSection;
@@ -272,6 +271,36 @@ public abstract class LASFileReader {
         parameterDataLine.value = line.substring(idxVal, idxDes).trim();
         parameterDataLine.description = line.substring(idxDes + 1, line.length()).trim();
         return parameterDataLine;
+    }
+    
+    protected static LASData buildData2(LASParameterDataSection curveInfo, LASParameterDataSection parameters, List<String> ascii) throws Exception {
+        LASData data = new LASData();
+        data.logDefinition = curveInfo;
+        data.logParameter = parameters;
+        int colsRead = 0;
+        int numCols = data.getColumnsCount();
+        String[] record = new String[numCols];
+        ascii.remove(0);
+        for (String line : ascii) {
+            if (colsRead == numCols) {
+                record = new String[numCols];
+                colsRead = 0;
+            }
+            line = line.trim();
+            String[] array;
+            array = line.split(" +");
+            for (String value : array) {
+                if (colsRead >= numCols) {
+                    throw new Exception("Could not parse data: column number does not match.");
+                }
+                record[colsRead] = value;
+                colsRead += 1;
+            }
+            if (colsRead == numCols) {
+                data.logRecords.add(record);
+            }
+        }
+        return data;
     }
     
     /* LAS 3.0 */

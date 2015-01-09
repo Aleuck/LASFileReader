@@ -7,6 +7,7 @@ package Test;
 
 import LAS.LASFile;
 import LAS.LASFileReader;
+import LAS.LASParameterDataLine;
 import java.io.File;
 import java.nio.file.Path;
 
@@ -28,7 +29,10 @@ public class LASFileTest {
         }
         if (args.length > 0) {
             filePath = new File(args[0]).toPath();
-                lasFile = LASFileReader.open(filePath);
+            lasFile = LASFileReader.open(filePath);
+            for (LASParameterDataLine parameter : lasFile.getVersionSection()) {
+                System.out.println(parameter.getMnemonic());
+            }
         }
     }
 }

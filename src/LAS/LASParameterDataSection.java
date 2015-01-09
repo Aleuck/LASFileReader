@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @author Alexandre Leuck
  */
-public class LASParameterDataSection implements Iterable {
+public class LASParameterDataSection implements Iterable<LASParameterDataLine> {
     protected String title = "";
     private final HashMap<String, Integer> parametersMap = new HashMap<>();
     private final List<LASParameterDataLine> parameters = new ArrayList<>();
@@ -62,14 +62,33 @@ public class LASParameterDataSection implements Iterable {
         }
         return getParameter(index);
     }
+    
+    /**
+     * Adds parameter to section, if there is already a parameter with the same mnemonic, it will not be overwritten.
+     * @param parameterDataLine 
+     */
     protected void addParameter(LASParameterDataLine parameterDataLine) {
         int i = parameters.size();
         parameters.add(parameterDataLine);
         parametersMap.put(parameterDataLine.getMnemonic(), i);
     }
+    
+    /**
+     * @return the actual number of parameters.
+     */
+    public int size() {
+        return parameters.size();
+    }
+    
+    /**
+     * @return the actual number of mnemonics excluding repeated.
+     */
+    public int mnemonicCount() {
+        return parametersMap.size();
+    }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<LASParameterDataLine> iterator() {
         return parameters.iterator();
     }
 }
