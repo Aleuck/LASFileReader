@@ -38,12 +38,8 @@ public class LASParameterDataLine {
     public String getValue() {
         return value;
     }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public List<String> getAssoc() {
-        return assocList;
+    
+    public String getDescription() {
+        return description;
     }
 }

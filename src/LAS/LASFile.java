@@ -16,14 +16,14 @@ import java.util.Map;
  */
 public class LASFile implements LASFileInterface {
     protected LASVersion version;
-    protected LASParameterDataSection version_section;
-    protected LASParameterDataSection well_section;
-    protected Map<String,LASData> data = new HashMap<>();
+    protected LASParameterDataSection versionSection;
+    protected LASParameterDataSection wellSection;
+    protected Map<String,LASLogData> data = new HashMap<>();
     // LAS 2.0 specific
         protected LASParameterDataSection other_section;
     // LAS 3.0 specific
-        protected LASParameterDataSection core_section;
-        protected LASParameterDataSection inclinometry_section;
+    //    protected LASParameterDataSection core_section;
+    //    protected LASParameterDataSection inclinometry_section;
 
     @Override
     public LASVersion getVersion() {
@@ -32,41 +32,42 @@ public class LASFile implements LASFileInterface {
 
     @Override
     public LASParameterDataSection getVersionSection() {
-        return version_section;
+        return versionSection;
     }
     
     @Override
     public LASParameterDataSection getWellSection() {
-        return well_section;
+        return wellSection;
     }
     /**
      * LAS 2.0 specific
      * @return 
      */
+    @Override
     public LASParameterDataSection getOtherSection() {
         return other_section;
     }
-    /**
-     * LAS 3.0 specific
-     * @return 
-     */
-    public LASParameterDataSection getCoreSection() {
-        return core_section;
-    }
-    /**
-     * LAS 3.0 specific
-     * @return 
-     */
-    public LASParameterDataSection getInclinometrySection() {
-        return inclinometry_section;
-    }
+//    /**
+//     * LAS 3.0 specific
+//     * @return 
+//     */
+//    public LASParameterDataSection getCoreSection() {
+//        return core_section;
+//    }
+//    /**
+//     * LAS 3.0 specific
+//     * @return 
+//     */
+//    public LASParameterDataSection getInclinometrySection() {
+//        return inclinometry_section;
+//    }
 
     @Override
-    public LASData getData(String title) {
+    public LASLogData getData(String title) {
         return data.get(title);
     }
     @Override
-    public LASData getData() {
+    public LASLogData getData() {
         return data.get("Log");
     }
 }

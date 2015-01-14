@@ -16,6 +16,7 @@ public interface LASFileInterface {
     LASVersion getVersion();
     LASParameterDataSection getVersionSection();
     LASParameterDataSection getWellSection();
-    LASData getData(String title);
-    LASData getData();
+    LASParameterDataSection getOtherSection();
+    LASLogData getData(String title);
+    LASLogData getData();
 }

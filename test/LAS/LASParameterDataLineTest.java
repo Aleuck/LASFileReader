@@ -84,28 +84,5 @@ public class LASParameterDataLineTest {
         String result = instance.getValue();
         assertEquals(expResult, result);
     }
-
-    /**
-     * Test of getFormat method, of class LASParameterDataLine.
-     */
-    @Test
-    public void testGetFormat() {
-        System.out.println("getFormat");
-        LASParameterDataLine instance = new LASParameterDataLine();
-        String expResult = "";
-        String result = instance.getFormat();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getAssoc method, of class LASParameterDataLine.
-     */
-    @Test
-    public void testGetAssoc() {
-        System.out.println("getAssoc");
-        LASParameterDataLine instance = new LASParameterDataLine();
-        List<String> result = instance.getAssoc();
-        assertTrue(result.isEmpty());
-    }
     
 }

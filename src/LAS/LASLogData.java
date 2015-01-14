@@ -13,9 +13,9 @@ import java.util.List;
  *
  * @author Alexandre Leuck
  */
-public class LASData implements Iterable<String[]> {
+public class LASLogData implements Iterable<String[]> {
     protected LASParameterDataSection logDefinition = new LASParameterDataSection(); // Column Definition (Curve)
-    protected LASParameterDataSection logParameter = new LASParameterDataSection(); // Parameters
+    protected LASParameterDataSection logParameters = new LASParameterDataSection(); // Parameters
     //protected List<LASLogDataRecord> logRecords = new ArrayList<>(); // Data
     protected List<String[]> logRecords = new ArrayList<>();
     /**
@@ -28,12 +28,27 @@ public class LASData implements Iterable<String[]> {
     /**
      * @return the number of columns. 
      */
-    public int getColumnsCount() {
+    public int getColumnCount() {
         return logDefinition.size();
     }
 
     @Override
     public Iterator<String[]> iterator() {
         return logRecords.iterator();
+    }
+    
+    public int size() {
+        return logRecords.size();
+    }
+    
+    public String[] getRow(int i) {
+        return logRecords.get(i);
+    }
+    
+    public LASParameterDataSection getParameters() {
+        return logParameters;
+    }
+    public LASParameterDataSection getDefinition() {
+        return logDefinition;
     }
 }

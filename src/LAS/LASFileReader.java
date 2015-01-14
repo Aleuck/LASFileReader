@@ -199,15 +199,17 @@ public abstract class LASFileReader {
         if (indexV == -1) {
             throw new Exception("Missing section ~V");
         }
-        lasFile.version_section = buildParamaterDataSection2(sections.get(indexV));
+        lasFile.versionSection = buildParamaterDataSection2(sections.get(indexV));
         // Well
         if (indexW == -1) {
             throw new Exception("Missing section ~W");
         }
-        lasFile.well_section = buildParamaterDataSection2(sections.get(indexW));
+        lasFile.wellSection = buildParamaterDataSection2(sections.get(indexW));
         // Other
         if (indexO != -1) {
             lasFile.other_section = buildParamaterDataSection2(sections.get(indexO));
+        } else {
+            lasFile.other_section = new LASParameterDataSection();
         }
         // Curve
         if (indexC == -1) {
@@ -227,10 +229,10 @@ public abstract class LASFileReader {
         }
         lasFile.data.put("Log", buildData2(curve, parameters, sections.get(indexA)));
         // identifying wrap mode
-        if (!lasFile.version_section.hasParameter("WRAP")) {
+        if (!lasFile.versionSection.hasParameter("WRAP")) {
             throw new Exception("Missing parameter: WRAP.");
         }
-        switch (lasFile.version_section.getParameter("WRAP").getValue()) {
+        switch (lasFile.versionSection.getParameter("WRAP").getValue()) {
             case "YES":
                 wrap = true;
                 break;
@@ -273,12 +275,12 @@ public abstract class LASFileReader {
         return parameterDataLine;
     }
     
-    protected static LASData buildData2(LASParameterDataSection curveInfo, LASParameterDataSection parameters, List<String> ascii) throws Exception {
-        LASData data = new LASData();
+    protected static LASLogData buildData2(LASParameterDataSection curveInfo, LASParameterDataSection parameters, List<String> ascii) throws Exception {
+        LASLogData data = new LASLogData();
         data.logDefinition = curveInfo;
-        data.logParameter = parameters;
+        data.logParameters = parameters;
         int colsRead = 0;
-        int numCols = data.getColumnsCount();
+        int numCols = data.getColumnCount();
         String[] record = new String[numCols];
         ascii.remove(0);
         for (String line : ascii) {
